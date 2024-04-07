@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08549d92751956b428c9f25894773272, type: 3}
+  m_Name: Weights
+  m_EditorClassIdentifier: 
+  PreFlopRaiseThreshold: 0.7
+  PreFlopCallThreshold: 0.3
+  PreFlopHandWeight: 0.4
+  PreFlopPotWeight: 0.6
+  FlopRaiseThreshold: 0.7
+  FlopCallThreshold: 0.5
+  FlopHandWeight: 0.3
+  FlopPotWeight: 0.15
+  FlopCommunityCardsWeight: 0.2
+  FlopFullHandWeight: 0.35
+  TurnRaiseThreshold: 1
+  TurnCallThreshold: 0.5
+  TurnHandWeight: 0.25
+  TurnPotWeight: 0.15
+  TurnCommunityCardsWeight: 0.25
+  TurnFullHandWeight: 0.35
+  RiverRaiseThreshold: 1
+  RiverCallThreshold: 0.5
+  RiverHandWeight: 0.2
+  RiverPotWeight: 0.15
+  RiverCommunityCardsWeight: 0.25
+  RiverFullHandWeight: 0.4
