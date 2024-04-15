@@ -45,9 +45,12 @@ public class SeatUI : MonoBehaviour
         BetText.text = "";
         MoneyText.text = "";
     }
-    public void UpdateBetText(int amount)
+    public void UpdateBetText(int amount, bool isAllIn)
     {
-        BetText.text = CurrencyFormatter.FormatCurrency(amount);
+        if (!isAllIn)
+            BetText.text = CurrencyFormatter.FormatCurrency(amount);
+        else
+            BetText.text = "AllIn";
     }
     public void UpdateTotalMoneyText(int amount)
     {

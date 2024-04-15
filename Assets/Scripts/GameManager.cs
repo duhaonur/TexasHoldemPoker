@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
             Card newCard = Instantiate(DeckPrefabs[i], DeckSpawnPos.position, DeckPrefabs[i].transform.rotation, DeckSpawnPos);
             _deck.Add(newCard);
         }
-
+        SharedData.Deck = _deck;
         #region CreateDeck
 
         #endregion

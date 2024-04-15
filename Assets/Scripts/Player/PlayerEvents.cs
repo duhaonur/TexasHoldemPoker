@@ -16,4 +16,6 @@ public static class PlayerEvents
     public static void CallPlayerFold() { OnPlayerFold?.Invoke(); }
     public static Action<float, float> OnMoveCamera;
     public static void CallMoveCamera(float x, float y) { OnMoveCamera?.Invoke(x, y); }
+    public static Action OnDisplayUI;
+    public static void CallDisplayUI() { OnDisplayUI?.Invoke(); }
 }

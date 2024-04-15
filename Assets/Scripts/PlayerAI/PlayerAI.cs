@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -9,6 +8,11 @@ public class PlayerAI : MonoBehaviour, IControlStateMachine, IPlayer
     public List<Card> HoleHand;
     public List<Card> CommunityCards;
     public List<Card> FullHand;
+    public List<Card> Deck;
+    public List<HandRank> Ranks;
+    public List<float> Something;
+
+    public Dictionary<HandRank, float> HandRankDictionary;
 
     public Seat Seat;
     public SeatUI SeatUI;
@@ -53,7 +57,7 @@ public class PlayerAI : MonoBehaviour, IControlStateMachine, IPlayer
     public bool IsBigBlind;
     public bool IsPlayerFolded;
     public bool IsMyTurn;
-
+    public bool IsAllIn;
     private State<PlayerAI, PlayerAIStateFactory> _currentState;
     private PlayerAIStateFactory _stateFactory;
 
@@ -70,6 +74,7 @@ public class PlayerAI : MonoBehaviour, IControlStateMachine, IPlayer
         HoleHand = new List<Card>();
         CommunityCards = new List<Card>();
         FullHand = new List<Card>();
+        Deck = new List<Card>();
     }
     void Start()
     {

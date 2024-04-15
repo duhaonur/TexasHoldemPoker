@@ -14,23 +14,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PreFlopRaiseThreshold: 0.7
   PreFlopCallThreshold: 0.3
+  PreFlopRaiseAggressiveness: 0.25
   PreFlopHandWeight: 0.4
-  PreFlopPotWeight: 0.6
-  FlopRaiseThreshold: 0.7
-  FlopCallThreshold: 0.5
-  FlopHandWeight: 0.3
+  PreFlopPotWeight: 0.2
+  PreFlopFutureHandWeight: 0.4
+  FlopRaiseThreshold: 0.6
+  FlopCallThreshold: 0.3
+  FlopRaiseAggressiveness: 0.25
+  FlopHandWeight: 0.2
   FlopPotWeight: 0.15
-  FlopCommunityCardsWeight: 0.2
-  FlopFullHandWeight: 0.35
-  TurnRaiseThreshold: 1
-  TurnCallThreshold: 0.5
-  TurnHandWeight: 0.25
+  FlopCommunityCardsWeight: 0.25
+  FlopFullHandWeight: 0.25
+  FlopFutureHandWeight: 0.2
+  TurnRaiseThreshold: 0.7
+  TurnCallThreshold: 0.4
+  TurnRaiseAggressiveness: 0.25
+  TurnHandWeight: 0.2
   TurnPotWeight: 0.15
   TurnCommunityCardsWeight: 0.25
-  TurnFullHandWeight: 0.35
-  RiverRaiseThreshold: 1
+  TurnFullHandWeight: 0.25
+  TurnFutureHandWeight: 0.2
+  RiverRaiseThreshold: 0.8
   RiverCallThreshold: 0.5
+  RiverRaiseAggressiveness: 0.25
   RiverHandWeight: 0.2
-  RiverPotWeight: 0.15
-  RiverCommunityCardsWeight: 0.25
-  RiverFullHandWeight: 0.4
+  RiverPotWeight: 0.3
+  RiverCommunityCardsWeight: 0
+  RiverFullHandWeight: 0.5
+  RiverFutureHandWeight: 0

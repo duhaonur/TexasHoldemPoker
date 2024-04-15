@@ -1,5 +1,9 @@
+using System.Collections.Generic;
+
 public static class SharedData
 {
+    public static List<Card> Deck;
+
     public static int MinimumBet { get; set; }
     public static int HighestBet { get; set; }
     public static int BigBlindBet { get; set; }

@@ -1,6 +1,7 @@
 using Cinemachine;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using static CardSettings;
 
@@ -28,7 +29,8 @@ public class PlayerController : MonoBehaviour, IPlayer
 
     public bool IsSmallBlind = false;
     public bool IsBigBlind = false;
-
+    public bool IsAllIn = false;
+    public bool IsMyTurn = false;
     private InputController _inputController;
 
     private int _cardCounter = 0;
@@ -49,6 +51,7 @@ public class PlayerController : MonoBehaviour, IPlayer
         GameEvents.OnSetBigBlind += BigBlind;
         GameEvents.OnSendCardToHand += GetCard;
         GameEvents.OnCommunityCard += GetCommunityCard;
+        GameEvents.OnGivePlayerTheTurn += GetTurn;
         PlayerEvents.OnPlayerRaise += PlayerRaise;
         PlayerEvents.OnPlayerCall += PlayerCall;
         PlayerEvents.OnPlayerCheck += PlayerCheck;
@@ -62,6 +65,7 @@ public class PlayerController : MonoBehaviour, IPlayer
         GameEvents.OnSetBigBlind -= BigBlind;
         GameEvents.OnSendCardToHand -= GetCard;
         GameEvents.OnCommunityCard -= GetCommunityCard;
+        GameEvents.OnGivePlayerTheTurn -= GetTurn;
         PlayerEvents.OnPlayerRaise -= PlayerRaise;
         PlayerEvents.OnPlayerCall -= PlayerCall;
         PlayerEvents.OnPlayerCheck -= PlayerCheck;
@@ -79,24 +83,37 @@ public class PlayerController : MonoBehaviour, IPlayer
 
     private void PlayerCheck()
     {
-        PlayerData.CurrentBet = SharedData.HighestBet;
-        GameEvents.CallPlayerFinishedTurn(PlayerData.CurrentBet, PlayerData.CurrentBet, SeatId);
+        GameEvents.CallPlayerFinishedTurn(0, PlayerData.CurrentBet, SeatId);
     }
 
     private void PlayerCall(int callAmount)
     {
-        throw new NotImplementedException();
+        callAmount = Mathf.Min(callAmount, PlayerData.TotalMoney);
+        IsAllIn = callAmount >= PlayerData.TotalMoney;
+        PlayerData.CurrentBet += callAmount;
+        PlayerData.TotalMoney -= callAmount;
+        SeatUI.UpdateBetText(PlayerData.CurrentBet, IsAllIn);
+        GameEvents.CallPlayerFinishedTurn(callAmount, PlayerData.CurrentBet, SeatId);
     }
 
     private void PlayerRaise(int raiseAmount)
     {
+        raiseAmount = Mathf.Min(raiseAmount, PlayerData.TotalMoney);
+        IsAllIn = raiseAmount >= PlayerData.TotalMoney;
         PlayerData.CurrentBet += raiseAmount;
+        PlayerData.TotalMoney -= raiseAmount;
         Debug.Log($"Player Current Bet {PlayerData.CurrentBet}");
-        SeatUI.UpdateBetText(PlayerData.CurrentBet);
+        SeatUI.UpdateBetText(PlayerData.CurrentBet, IsAllIn);
         GameEvents.CallPlayerFinishedTurn(raiseAmount, PlayerData.CurrentBet, SeatId);
-        GameEvents.CallPlayerRaise(true);
     }
-
+    private void GetTurn(int seatId, CurrentGameState gameState)
+    {
+        if (SeatId == seatId)
+        {
+            IsMyTurn = true;
+            PlayerEvents.CallDisplayUI();
+        }
+    }
     private void GetSeatId(int id, Seat seat)
     {
         SeatId = id;

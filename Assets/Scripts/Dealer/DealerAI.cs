@@ -1,12 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using static CardSettings;
 
 public class DealerAI : MonoBehaviour, IControlStateMachine
 {
     public Dictionary<int, int> PlayersBetAmount;
     public Stack<Card> Deck;
     public List<Card> CommunityCards;
+
+    public List<HandRank> HandRank;
+    public List<float> strength;
 
     public CurrentGameState GameState = CurrentGameState.PreFlop;
     [Header("Card Amounts To Deal")]
@@ -98,6 +103,11 @@ public class DealerAI : MonoBehaviour, IControlStateMachine
         }
         yield return new WaitForSeconds(2);
         GiveTurnToNextPlayer = true;
+        var predicted = PlayerAIMoveDecision.PredictHand(CommunityCards, 100);
+        var hand = PlayerAIMoveDecision.SetBestPossibleCommunityCard(predicted);
+        Debug.Log($"Dealer AI Best Hand: {hand}");
+        HandRank = new List<HandRank>(predicted.Keys);
+        strength = new List<float>(predicted.Values);
     }
     private void GetCommunityCard(Card card)
     {
@@ -156,10 +166,6 @@ public class DealerAI : MonoBehaviour, IControlStateMachine
         WaitForThePlayer = false;
         GiveTurnToNextPlayer = true;
     }
-    //private void SomeoneRaised(bool value)
-    //{
-    //    ReadyForNextStage = value;
-    //}
 
     private void StartTheGame()
     {

@@ -1,27 +1,41 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DealerAIGivePlayerTurnState : State<DealerAI, DealerStateFactory>
 {
-    private int _timesWeWereHere = 0;
-    private int _readyPlayers = 0;
-    private int _lastRaisedPlayer = -1;
+    private List<Seat> _playersThatMustPlayAgain;
+
+    private int _lastRaisedPlayer = 0;
+
     public DealerAIGivePlayerTurnState(DealerAI stateMachineController, DealerStateFactory stateFactory) : base(stateMachineController, stateFactory)
     {
 
     }
     protected override void OnEnter()
     {
-        Debug.Log("EnterDealerTurn");
         if (_stateMachine.CurrentPlayersTurn >= _stateMachine.PlayerCount)
         {
-            Debug.Log("TurnEnterFirstIf");
-            GiveTurnForRaiseOrCall();
+            var checkIfSomeoneRaised = CheckIfSomeoneRaised();
+
+            if (checkIfSomeoneRaised.isPlayersReady)
+            {
+                GiveTurnToPlayer(checkIfSomeoneRaised.players);
+            }
+            else
+            {
+                _stateMachine.ReadyForNextStage = true;
+                CheckSwitchState();
+            }
+
         }
         else
         {
-            GiveTurnToPlayer();
+            GiveTurnToPlayer(_stateMachine.Players);
         }
+
+        CheckSwitchState();
     }
     protected override void OnUpdate()
     {
@@ -29,62 +43,54 @@ public class DealerAIGivePlayerTurnState : State<DealerAI, DealerStateFactory>
     }
     protected override void OnExit()
     {
-        _timesWeWereHere++;
     }
     protected override void CheckSwitchState()
     {
         SwitchState(_stateFactory.IdleState);
     }
-    private void GiveTurnForRaiseOrCall()
+    private void GiveTurnToPlayer(Dictionary<int,Seat> playerList)
     {
-        for (int i = 0; i < _stateMachine.PlayerCount; i++)
+        if(playerList.TryGetValue(_stateMachine.CurrentPlayersTurn, out Seat seat))
         {
-            Debug.Log($"For Loop{i}");
+            GameEvents.CallGivePlayerTheTurn(seat.SeatId, _stateMachine.GameState);
+            _stateMachine.WaitForThePlayer = true;
+            _stateMachine.GiveTurnToNextPlayer = false;
+            _stateMachine.CurrentPlayersTurn++;
+        }
+    }
+    private void GiveTurnToPlayer(List<Seat> playerList)
+    {
+        Debug.Log($"Raiste Turn Player {playerList.First().gameObject.name}");
+        GameEvents.CallGivePlayerTheTurn(playerList.First().SeatId, _stateMachine.GameState);
+        _stateMachine.WaitForThePlayer = true;
+        _stateMachine.GiveTurnToNextPlayer = false;
+    }
+
+    private (bool isPlayersReady, List<Seat> players) CheckIfSomeoneRaised()
+    {
+        bool doWeHaveARaiser = false;
+
+        _lastRaisedPlayer = _lastRaisedPlayer >= _stateMachine.PlayerCount ? 0 : _lastRaisedPlayer;
+
+        _playersThatMustPlayAgain = new List<Seat>();
+
+        for (int i = _lastRaisedPlayer; i < _stateMachine.PlayerCount; i++)
+        {
             if (_stateMachine.Players.TryGetValue(i, out Seat seat))
             {
                 if (_stateMachine.PlayersBetAmount.TryGetValue(seat.SeatId, out int betAmount))
                 {
-                    if (_lastRaisedPlayer == seat.SeatId)
-                        continue;
-
-                    Debug.Log($"Seat ID: {seat.SeatId} Bet Amount: {betAmount}");
-                    if (betAmount < SharedData.HighestBet)
+                    Debug.Log($"Seat: {seat.SeatId} Bet Amount: {betAmount}");
+                    if(betAmount != SharedData.HighestBet)
                     {
-                        Debug.Log($"Inside Current Player {seat.SeatId}");
-                        GameEvents.CallGivePlayerTheTurn(seat.SeatId, _stateMachine.GameState);
-                        _lastRaisedPlayer = seat.SeatId;
-                        _stateMachine.WaitForThePlayer = true;
-                        _stateMachine.GiveTurnToNextPlayer = false;
-                        break;
-                    }
-                    else
-                    {
-                        _readyPlayers++;
-                        Debug.Log($"Ready Player{_readyPlayers}");
+                        Debug.Log($"Player Added to list: {seat.gameObject.name}");
+                        _playersThatMustPlayAgain.Add(seat);
+                        doWeHaveARaiser = true;
                     }
                 }
             }
         }
-        if (_readyPlayers >= _stateMachine.PlayerCount - 1)
-        {
-            _stateMachine.ReadyForNextStage = true;
-            _readyPlayers = 0;
-        }
-
-        _lastRaisedPlayer = -1;
-        CheckSwitchState();
-    }
-    private void GiveTurnToPlayer()
-    {
-        Debug.Log("TurnEnterSecondIf");
-        Debug.Log(_stateMachine.CurrentPlayersTurn);
-        int seatID = _stateMachine.Players[_stateMachine.CurrentPlayersTurn].SeatId;
-        Debug.Log($"Current Seat Id {seatID} Times We Were Here {_timesWeWereHere}");
-        GameEvents.CallGivePlayerTheTurn(seatID, _stateMachine.GameState);
-        _stateMachine.WaitForThePlayer = true;
-        _stateMachine.GiveTurnToNextPlayer = false;
-        _stateMachine.CurrentPlayersTurn++;
-
-        CheckSwitchState();
+        _lastRaisedPlayer = _playersThatMustPlayAgain.Count > 0 ? _playersThatMustPlayAgain.First().SeatId : 0;
+        return (doWeHaveARaiser, _playersThatMustPlayAgain);
     }
 }

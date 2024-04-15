@@ -23,6 +23,11 @@ public class PlayerAIIdleState : State<PlayerAI, PlayerAIStateFactory>
         if (!_stateMachine.IsMyTurn)
             return;
 
+        if (_stateMachine.IsAllIn)
+        {
+            GameEvents.CallPlayerFinishedTurn(0, _stateMachine.CurrentBet, _stateMachine.SeatId);
+        }
+
         if (_stateMachine.CurrentGameState == CurrentGameState.PreFlop)
         {
             if (_stateMachine.IsSmallBlind)

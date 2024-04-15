@@ -72,18 +72,20 @@ public static class HandEvaluation
         // Straight Flush: Five consecutive cards of the same suit
         foreach (Suit suit in Enum.GetValues(typeof(Suit)))
         {
-            for (int i = 2; i <= (int)Rank.Ace - 4; i++)
+            for (int i = 2; i <= (int)Rank.Ace - 3; i++)
             {
                 bool straightFlushFound = true;
                 int sumOfRanks = 0;
                 for (int j = i; j < i + 5; j++)
                 {
-                    if (!cards.Any(c => c.CardRank == (Rank)j && c.CardSuit == suit))
+                    // Adjust the value of Ace when it's considered as the lowest card (A-2-3-4-5)
+                    Rank rankToCheck = (Rank)(j == (int)Rank.Ace ? 1 : j);
+                    if (!cards.Any(c => c.CardRank == rankToCheck && c.CardSuit == suit))
                     {
                         straightFlushFound = false;
                         break;
                     }
-                    sumOfRanks += j;
+                    sumOfRanks += (int)rankToCheck;
                 }
                 if (straightFlushFound)
                 {
@@ -112,26 +114,16 @@ public static class HandEvaluation
     // Check if the hand is Full House
     public static (bool exists, int sumOfRanks) IsFullHouse(IEnumerable<Card> cards)
     {
-        // Full House: Three cards of one rank and two cards of another rank
-        Rank threeOfAKindRank = 0;
-        Rank pairRank = 0;
-        foreach (Rank rank in Enum.GetValues(typeof(Rank)))
+        var groupedCards = cards.GroupBy(c => c.CardRank);
+        var threeOfAKind = groupedCards.FirstOrDefault(g => g.Count() == 3);
+        var pair = groupedCards.FirstOrDefault(g => g.Count() == 2);
+
+        if (threeOfAKind != null && pair != null && threeOfAKind.Key != pair.Key)
         {
-            int count = cards.Count(c => c.CardRank == rank);
-            if (count == 3)
-            {
-                threeOfAKindRank = rank;
-            }
-            else if (count == 2)
-            {
-                pairRank = rank;
-            }
-        }
-        if (threeOfAKindRank != 0 && pairRank != 0)
-        {
-            int sumOfRanks = (int)threeOfAKindRank * 3 + (int)pairRank * 2; // Sum of ranks for a full house
+            int sumOfRanks = (int)threeOfAKind.Key * 3 + (int)pair.Key * 2; // Sum of ranks for a full house
             return (true, sumOfRanks);
         }
+
         return (false, 0);
     }
 
@@ -158,18 +150,20 @@ public static class HandEvaluation
     public static (bool exists, int sumOfRanks) IsStraight(IEnumerable<Card> cards)
     {
         // Straight: Five consecutive cards of any suit
-        for (int i = 2; i <= (int)Rank.Ace - 4; i++)
+        for (int i = 2; i <= (int)Rank.Ace - 3; i++)
         {
             bool straightFound = true;
             int sumOfRanks = 0;
             for (int j = i; j < i + 5; j++)
             {
-                if (!cards.Any(c => c.CardRank == (Rank)j))
+                // Adjust the value of Ace when it's considered as the lowest card (A-2-3-4-5)
+                Rank rankToCheck = (Rank)(j == (int)Rank.Ace ? 1 : j);
+                if (!cards.Any(c => c.CardRank == rankToCheck))
                 {
                     straightFound = false;
                     break;
                 }
-                sumOfRanks += j;
+                sumOfRanks += (int)rankToCheck;
             }
             if (straightFound)
             {

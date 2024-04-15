@@ -121,9 +121,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2075296049396753156}
-  - {fileID: 3957530201932117763}
-  - {fileID: 3390627222732138388}
+  - {fileID: 9207580421935388454}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -211,8 +209,11 @@ MonoBehaviour:
   _wholeCanvasGroup: {fileID: 0}
   _raiseSlider: {fileID: 5434936808236448798}
   _raiseText: {fileID: 6467557774095922483}
-  _quickActionOneText: {fileID: 0}
-  _quickActionTwoText: {fileID: 0}
+  _checkCallText: {fileID: 3041623188282000906}
+  _quickActionOneText: {fileID: 6955497191342794483}
+  _quickActionTwoText: {fileID: 6138470976098377460}
+  _quickActionButtonOne: {fileID: 1294550819142839749}
+  _quickActionButtonTwo: {fileID: 150075111535191685}
   _fadeDuration: 0.5
 --- !u!1 &906656775952347683
 GameObject:
@@ -289,6 +290,57 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &1102797537063681025
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9207580421935388454}
+  - component: {fileID: 1108661061191202759}
+  m_Layer: 5
+  m_Name: ButtonsCanvasGroup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &9207580421935388454
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1102797537063681025}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2075296049396753156}
+  - {fileID: 3957530201932117763}
+  - {fileID: 3390627222732138388}
+  m_Father: {fileID: 3017085974615339456}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &1108661061191202759
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1102797537063681025}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2176698621125328817
 GameObject:
   m_ObjectHideFlags: 0
@@ -351,17 +403,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2194967757998813312}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4660034625733690420}
-  m_Father: {fileID: 3017085974615339456}
+  m_Father: {fileID: 9207580421935388454}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -125, y: 0}
+  m_AnchoredPosition: {x: 358, y: -258}
   m_SizeDelta: {x: 115, y: 30}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &2085083641655375851
@@ -545,7 +597,7 @@ GameObject:
   - component: {fileID: 8311552719865244272}
   - component: {fileID: 6955497191342794483}
   m_Layer: 5
-  m_Name: RaiseButtonText
+  m_Name: QuickActionButton-1Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -679,7 +731,7 @@ GameObject:
   - component: {fileID: 5019284549403048571}
   - component: {fileID: 3041623188282000906}
   m_Layer: 5
-  m_Name: CheckButtonText
+  m_Name: CheckCallButtonText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -814,7 +866,7 @@ GameObject:
   - component: {fileID: 8005373206980726196}
   - component: {fileID: 6236759112805907901}
   m_Layer: 5
-  m_Name: CheckButton
+  m_Name: CheckCallButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -827,17 +879,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2887855187147771275}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4645321799316334134}
-  m_Father: {fileID: 3017085974615339456}
+  m_Father: {fileID: 9207580421935388454}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -250, y: 0}
+  m_AnchoredPosition: {x: 233, y: -258}
   m_SizeDelta: {x: 115, y: 30}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &2150027044681851408
@@ -1091,7 +1143,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3472135338742353396}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1100,7 +1152,7 @@ RectTransform:
   - {fileID: 7371120840240470045}
   - {fileID: 303016249671429600}
   - {fileID: 8281625693349900048}
-  m_Father: {fileID: 3017085974615339456}
+  m_Father: {fileID: 9207580421935388454}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1620,7 +1672,7 @@ GameObject:
   - component: {fileID: 3294511204282425609}
   - component: {fileID: 6138470976098377460}
   m_Layer: 5
-  m_Name: RaiseButtonText
+  m_Name: QuickActionButton-2Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

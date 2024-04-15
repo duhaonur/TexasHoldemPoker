@@ -17,7 +17,7 @@ public class PlayerAISmallBlindState : State<PlayerAI, PlayerAIStateFactory>
         _stateMachine.CurrentBet += betAmount;
         _stateMachine.TotalMoney -= betAmount;
         GameEvents.CallPlayerFinishedTurn(betAmount, _stateMachine.CurrentBet, _stateMachine.SeatId);
-        _stateMachine.SeatUI.UpdateBetText(_stateMachine.CurrentBet);
+        _stateMachine.SeatUI.UpdateBetText(_stateMachine.CurrentBet, _stateMachine.IsAllIn);
         _stateMachine.SeatUI.UpdateTotalMoneyText(_stateMachine.TotalMoney);
         SwitchState(_stateFactory.IdleState);
     }
