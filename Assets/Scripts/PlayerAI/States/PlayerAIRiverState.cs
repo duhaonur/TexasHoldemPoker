@@ -9,12 +9,9 @@ public class PlayerAIRiverState : State<PlayerAI, PlayerAIStateFactory>
     // Method called when entering the river state
     protected override void OnEnter()
     {
-        Debug.Log($"{_stateMachine.gameObject.name}-PLayerAI River Enter");
-
         // Evaluate hand strength and game dynamics
         var predictedHand = PlayerAIMoveDecision.PredictHand(_stateMachine.HoleHand, _stateMachine.CommunityCards, 100);
         var handrank = PlayerAIMoveDecision.SetHighestHandRank(predictedHand);
-        Debug.Log($"{_stateMachine.gameObject.name}HandRank:{handrank}");
 
         float handRatio = PlayerAIMoveDecision.HoleHand(_stateMachine.HoleHand, _stateMachine.WeightSettings.RiverHandWeight, _stateMachine.gameObject.name);
         float fullHandRatio = PlayerAIMoveDecision.FullHand(_stateMachine.FullHand, _stateMachine.WeightSettings.RiverFullHandWeight, _stateMachine.gameObject.name);
@@ -22,8 +19,6 @@ public class PlayerAIRiverState : State<PlayerAI, PlayerAIStateFactory>
 
         // Calculate the weighted sum of different factors
         float weightSum = handRatio + fullHandRatio + potRatio;
-
-        Debug.Log($"{_stateMachine.gameObject.name}-Flop HandRatio:{handRatio} FullHandRatio:{fullHandRatio} PotRatio:{potRatio} WholeWeight:{weightSum}");
 
         // Dynamically adjust thresholds based on weighted sum and game dynamics
         if (weightSum >= _stateMachine.WeightSettings.RiverRaiseThreshold)
@@ -53,7 +48,6 @@ public class PlayerAIRiverState : State<PlayerAI, PlayerAIStateFactory>
     // Method called when exiting the river state
     protected override void OnExit()
     {
-        Debug.Log($"{_stateMachine.gameObject.name}-PLayerAI River Exit");
         _stateMachine.IsMyTurn = false;
     }
 
@@ -66,8 +60,6 @@ public class PlayerAIRiverState : State<PlayerAI, PlayerAIStateFactory>
     // Raise method for the river state
     private void Raise(float handStrength, float totalMoney, int currentBet, int highestBet)
     {
-        Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI River Raise");
-
         float raiseAmount = CalculateRaiseAmount(handStrength, totalMoney, currentBet, highestBet);
         _stateMachine.CurrentBet += (int)raiseAmount;
         _stateMachine.TotalMoney -= (int)raiseAmount;
@@ -82,12 +74,10 @@ public class PlayerAIRiverState : State<PlayerAI, PlayerAIStateFactory>
 
         if (SharedData.HighestBet == _stateMachine.CurrentBet)
         {
-            Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI River Check");
             _stateMachine.SeatUI.ChangeInformationText("Check");
         }
         else
         {
-            Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI River Call");
             _stateMachine.SeatUI.ChangeInformationText("Call");
             callAmount = Mathf.Max(SharedData.HighestBet - _stateMachine.CurrentBet, 0);
         }
@@ -108,7 +98,6 @@ public class PlayerAIRiverState : State<PlayerAI, PlayerAIStateFactory>
     // Fold method for the river state
     private void Fold()
     {
-        Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI River Fold");
         _stateMachine.IsPlayerFolded = true;
         _stateMachine.SeatUI.ChangeInformationText("Fold");
         GameEvents.CallPlayerFold(_stateMachine.SeatId);

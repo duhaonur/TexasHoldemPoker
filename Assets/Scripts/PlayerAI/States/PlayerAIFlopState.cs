@@ -9,12 +9,9 @@ public class PlayerAIFlopState : State<PlayerAI, PlayerAIStateFactory>
     // Method called when entering the flop state
     protected override void OnEnter()
     {
-        Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI Flop Enter");
-
         // Predict hand and evaluate hand rank
         var predictedHand = PlayerAIMoveDecision.PredictHand(_stateMachine.HoleHand, _stateMachine.CommunityCards, 100);
         var handrank = PlayerAIMoveDecision.SetHighestHandRank(predictedHand);
-        Debug.Log($"{_stateMachine.gameObject.name}HandRank:{handrank}");
 
         // Calculate future hand weight, hand ratio, full hand ratio, and pot ratio
         float futureHandWeight = PlayerAIMoveDecision.FutureHandRatio(_stateMachine.HoleHand, _stateMachine.CommunityCards, predictedHand, 100, _stateMachine.WeightSettings.FlopFutureHandWeight);
@@ -24,8 +21,6 @@ public class PlayerAIFlopState : State<PlayerAI, PlayerAIStateFactory>
 
         // Calculate weighted sum of factors
         float weightSum = handRatio + fullHandRatio + potRatio + futureHandWeight;
-
-        Debug.Log($"{_stateMachine.gameObject.name}-Flop HandRatio:{handRatio} FullHandRatio:{fullHandRatio} PotRatio:{potRatio} FutureHandRatio:{futureHandWeight} WholeWeight:{weightSum}");
 
         // Dynamically adjust thresholds based on weighted sum and game dynamics
         if (weightSum >= _stateMachine.WeightSettings.FlopRaiseThreshold)
@@ -55,7 +50,6 @@ public class PlayerAIFlopState : State<PlayerAI, PlayerAIStateFactory>
     // Method called when exiting the flop state
     protected override void OnExit()
     {
-        Debug.Log($"{_stateMachine.gameObject.name}-PLayerAI Flop Exit");
         _stateMachine.IsMyTurn = false;
     }
 
@@ -68,8 +62,6 @@ public class PlayerAIFlopState : State<PlayerAI, PlayerAIStateFactory>
     // Raise method for the flop state
     private void Raise(float handStrength, float totalMoney, int currentBet, int highestBet)
     {
-        Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI Flop Raise");
-
         float raiseAmount = CalculateRaiseAmount(handStrength, totalMoney, currentBet, highestBet);
         _stateMachine.CurrentBet += (int)raiseAmount;
         _stateMachine.TotalMoney -= (int)raiseAmount;
@@ -84,12 +76,10 @@ public class PlayerAIFlopState : State<PlayerAI, PlayerAIStateFactory>
 
         if (SharedData.HighestBet == _stateMachine.CurrentBet)
         {
-            Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI Flop Check");
             _stateMachine.SeatUI.ChangeInformationText("Check");
         }
         else
         {
-            Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI Flop Call");
             _stateMachine.SeatUI.ChangeInformationText("Call");
             callAmount = Mathf.Max(SharedData.HighestBet - _stateMachine.CurrentBet, 0);
         }
@@ -110,7 +100,6 @@ public class PlayerAIFlopState : State<PlayerAI, PlayerAIStateFactory>
     // Fold method for the flop state
     private void Fold()
     {
-        Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI Flop Fold");
         _stateMachine.IsPlayerFolded = true;
         _stateMachine.SeatUI.ChangeInformationText("Fold");
         GameEvents.CallPlayerFold(_stateMachine.SeatId);

@@ -15,11 +15,10 @@ public class InputController : MonoBehaviour
     {
         _mainCamera = Camera.main;
     }
-
     private void OnEnable()
     {
-        EnhancedTouchSupport.Enable();
         TouchSimulation.Enable();
+        EnhancedTouchSupport.Enable();
         Touch.onFingerDown += StartTouch;
         Touch.onFingerMove += FingerMoving;
         Touch.onFingerUp += EndTouch;
@@ -31,8 +30,8 @@ public class InputController : MonoBehaviour
         Touch.onFingerDown -= StartTouch;
         Touch.onFingerMove -= FingerMoving;
         Touch.onFingerUp -= EndTouch;
-        EnhancedTouchSupport.Disable();
         TouchSimulation.Disable();
+        EnhancedTouchSupport.Disable();
 
         GameEvents.OnStartGame -= GameStarted;
     }

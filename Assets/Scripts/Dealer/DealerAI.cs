@@ -80,7 +80,6 @@ public class DealerAI : MonoBehaviour, IControlStateMachine
         GameEvents.OnCommunityCard += GetCommunityCard;
         GameEvents.OnPlayerFold += RemovePlayerFromTheGame;
         GameEvents.OnPlayerFinishedTurn += PlayerFinishedItsTurn;
-        //GameEvents.OnPlayerRaise += SomeoneRaised;
     }
 
     // Unsubscribe from events when the object is disabled
@@ -93,7 +92,6 @@ public class DealerAI : MonoBehaviour, IControlStateMachine
         GameEvents.OnCommunityCard -= GetCommunityCard;
         GameEvents.OnPlayerFold -= RemovePlayerFromTheGame;
         GameEvents.OnPlayerFinishedTurn -= PlayerFinishedItsTurn;
-        //GameEvents.OnPlayerRaise -= SomeoneRaised;
     }
 
     // Awake is called when the script instance is being loaded
@@ -148,7 +146,7 @@ public class DealerAI : MonoBehaviour, IControlStateMachine
             for (int j = 0; j < PlayerCount; j++)
             {
                 Card card = Deck.Pop();
-                yield return StartCoroutine(card.HideCard(0.2f, false));
+                yield return StartCoroutine(card.HideCard(0.2f));
                 GameEvents.CallSendCardToHand(Players[j].SeatId, card);
             }
         }
@@ -167,7 +165,7 @@ public class DealerAI : MonoBehaviour, IControlStateMachine
         for (int i = 0; i < cardAmountToDeal; i++)
         {
             Card card = Deck.Pop();
-            yield return StartCoroutine(card.HideCard(0.2f, false));
+            yield return StartCoroutine(card.HideCard(0.2f));
             GameEvents.CallCommunityCard(Deck.Pop());
         }
 
@@ -180,7 +178,6 @@ public class DealerAI : MonoBehaviour, IControlStateMachine
         // Predict AI's best hand based on current community cards
         var predicted = PlayerAIMoveDecision.PredictHand(CommunityCards, 100);
         var hand = PlayerAIMoveDecision.SetBestPossibleCommunityCard(predicted);
-        Debug.Log($"Dealer AI Best Hand: {hand}");
 
         // Store predicted hand ranks and strengths
         HandRank = new List<HandRank>(predicted.Keys);

@@ -8,7 +8,6 @@ public class PlayerAISmallBlindState : State<PlayerAI, PlayerAIStateFactory>
 
     protected override void OnEnter()
     {
-        Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI Small Blind Enter");
     }
 
     protected override void OnUpdate()
@@ -31,7 +30,6 @@ public class PlayerAISmallBlindState : State<PlayerAI, PlayerAIStateFactory>
         // Clean up state variables
         _stateMachine.IsMyTurn = false;
         _stateMachine.IsSmallBlind = false;
-        Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI Small Blind Exit");
     }
 
     protected override void CheckSwitchState()

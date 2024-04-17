@@ -5,7 +5,6 @@ using static CardSettings;
 
 public static class PlayerAIMoveDecision
 {
-    private static int _lowestHandRank = (int)HandRank.HighCard;
     private static float _highestHandRank = (float)HandRank.RoyalFlush;
     private static float _highestCommunityRank = (float)HandRank.HighCard;
     private static System.Random random = new System.Random();

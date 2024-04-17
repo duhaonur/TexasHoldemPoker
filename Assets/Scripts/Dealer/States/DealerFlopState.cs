@@ -1,4 +1,3 @@
-using UnityEngine;
 public class DealerFlopState : State<DealerAI, DealerStateFactory>
 {
     public DealerFlopState(DealerAI stateMachineController, DealerStateFactory stateFactory) : base(stateMachineController, stateFactory)
@@ -8,8 +7,6 @@ public class DealerFlopState : State<DealerAI, DealerStateFactory>
     // Called when entering the state
     protected override void OnEnter()
     {
-        Debug.Log("Dealer Flop Enter");
-
         // Reset flags and set game state
         _stateMachine.GiveTurnToNextPlayer = false;
         _stateMachine.ReadyForNextStage = false;
@@ -32,7 +29,6 @@ public class DealerFlopState : State<DealerAI, DealerStateFactory>
     // Called when exiting the state
     protected override void OnExit()
     {
-        Debug.Log("Dealer Flop Exit");
     }
 
     // Check conditions for transitioning to another state

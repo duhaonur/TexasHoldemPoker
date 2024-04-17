@@ -39,7 +39,9 @@ public class PlayerController : MonoBehaviour, IPlayer
         // Initialize lists and setup initial total money
         HoleHand = new List<Card>();
         FullHand = new List<Card>();
+
         _inputController = CheckNull(_inputController);
+
         PlayerData.TotalMoney = 1000;
         PlayerEvents.CallDisplayTotalMoney(PlayerData.TotalMoney);
     }
@@ -48,6 +50,7 @@ public class PlayerController : MonoBehaviour, IPlayer
     {
         // Subscribe to events
         SeatEvents.OnGetSeatId += GetSeatId;
+
         GameEvents.OnSetSmallBlind += SmallBlind;
         GameEvents.OnSetBigBlind += BigBlind;
         GameEvents.OnSendCardToHand += GetCard;
@@ -55,17 +58,18 @@ public class PlayerController : MonoBehaviour, IPlayer
         GameEvents.OnGivePlayerTheTurn += GetTurn;
         GameEvents.OnWinner += Winner;
         GameEvents.OnResetGame += GameReset;
+
         PlayerEvents.OnPlayerRaise += PlayerRaise;
         PlayerEvents.OnPlayerCall += PlayerCall;
         PlayerEvents.OnPlayerCheck += PlayerCheck;
         PlayerEvents.OnPlayerFold += PlayerFold;
-        PlayerEvents.OnMoveCamera += MoveCamera;
     }
 
     private void OnDisable()
     {
         // Unsubscribe from events
         SeatEvents.OnGetSeatId -= GetSeatId;
+
         GameEvents.OnSetSmallBlind -= SmallBlind;
         GameEvents.OnSetBigBlind -= BigBlind;
         GameEvents.OnSendCardToHand -= GetCard;
@@ -73,11 +77,11 @@ public class PlayerController : MonoBehaviour, IPlayer
         GameEvents.OnGivePlayerTheTurn -= GetTurn;
         GameEvents.OnWinner -= Winner;
         GameEvents.OnResetGame -= GameReset;
+
         PlayerEvents.OnPlayerRaise -= PlayerRaise;
         PlayerEvents.OnPlayerCall -= PlayerCall;
         PlayerEvents.OnPlayerCheck -= PlayerCheck;
         PlayerEvents.OnPlayerFold -= PlayerFold;
-        PlayerEvents.OnMoveCamera -= MoveCamera;
     }
 
     // Interface method to send hand information
@@ -235,23 +239,6 @@ public class PlayerController : MonoBehaviour, IPlayer
     {
         if (SeatId == id)
             IsBigBlind = true;
-    }
-
-    private void MoveCamera(float x, float y)
-    {
-        // Move camera
-        if (x > 0)
-        {
-            _freeLookCamera.m_XAxis.m_InputAxisValue = 1;
-        }
-        else if (x < 0)
-        {
-            _freeLookCamera.m_XAxis.m_InputAxisValue = -1;
-        }
-        else
-        {
-            _freeLookCamera.m_XAxis.m_InputAxisValue = 0;
-        }
     }
 
     private T CheckNull<T>(T component) where T : Component

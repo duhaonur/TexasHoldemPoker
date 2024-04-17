@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 public class DealerAIGivePlayerTurnState : State<DealerAI, DealerStateFactory>
 {
@@ -28,7 +27,6 @@ public class DealerAIGivePlayerTurnState : State<DealerAI, DealerStateFactory>
     // Called when exiting the state
     protected override void OnExit()
     {
-        Debug.Log("Dealer Give Turn Exit");
     }
 
     // Check conditions for transitioning to another state
@@ -97,7 +95,6 @@ public class DealerAIGivePlayerTurnState : State<DealerAI, DealerStateFactory>
     // Give turn to a list of players who must play again due to raise
     private void GiveTurnToPlayer(List<Seat> playerList)
     {
-        Debug.Log($"Raise Turn Player {playerList.First().gameObject.name}");
         _stateMachine.WaitForThePlayer = true;
         _stateMachine.GiveTurnToNextPlayer = false;
         GameEvents.CallGivePlayerTheTurn(_playersThatMustPlayAgain.First().SeatId, _stateMachine.GameState);
@@ -117,10 +114,8 @@ public class DealerAIGivePlayerTurnState : State<DealerAI, DealerStateFactory>
             {
                 if (_stateMachine.PlayersBetAmount.TryGetValue(seat.SeatId, out int betAmount))
                 {
-                    Debug.Log($"Seat: {seat.SeatId} Bet Amount: {betAmount}");
                     if (betAmount != SharedData.HighestBet && !seat.isAllIn)
                     {
-                        Debug.Log($"Player Added to list: {seat.gameObject.name}");
                         _playersThatMustPlayAgain.Add(seat);
                         doWeHaveARaiser = true;
                     }

@@ -1,4 +1,3 @@
-using UnityEngine;
 public class DealerIdleState : State<DealerAI, DealerStateFactory>
 {
     public DealerIdleState(DealerAI stateMachineController, DealerStateFactory stateFactory) : base(stateMachineController, stateFactory)
@@ -8,7 +7,6 @@ public class DealerIdleState : State<DealerAI, DealerStateFactory>
     // Called when entering the state
     protected override void OnEnter()
     {
-        Debug.Log("Dealer Idle Enter");
     }
 
     // Called every frame while in the state
@@ -21,7 +19,6 @@ public class DealerIdleState : State<DealerAI, DealerStateFactory>
     // Called when exiting the state
     protected override void OnExit()
     {
-        Debug.Log("Dealer Idle Exit");
     }
 
     // Check conditions for transitioning to another state
@@ -32,13 +29,11 @@ public class DealerIdleState : State<DealerAI, DealerStateFactory>
         // Someone raised and it's time to give turn to next player
         if (!_stateMachine.WaitForThePlayer && _stateMachine.GiveTurnToNextPlayer && !_stateMachine.ReadyForNextStage && _stateMachine.CurrentPlayersTurn >= _stateMachine.PlayerCount)
         {
-            Debug.Log("Someone Raised. Look for call or fold.");
             SwitchState(_stateFactory.GivePlayerTurnState);
         }
         // Normal play without raise
         else if (!_stateMachine.WaitForThePlayer && _stateMachine.GiveTurnToNextPlayer && _stateMachine.CurrentPlayersTurn < _stateMachine.PlayerCount)
         {
-            Debug.Log("Normal play");
             SwitchState(_stateFactory.GivePlayerTurnState);
         }
         // Transition to FlopState after PreFlop stage

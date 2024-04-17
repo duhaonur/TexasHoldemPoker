@@ -8,12 +8,9 @@ public class PlayerAITurnState : State<PlayerAI, PlayerAIStateFactory>
 
     protected override void OnEnter()
     {
-        Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI Turn Enter");
-
         // Predict hand and evaluate game dynamics
         var predictedHand = PlayerAIMoveDecision.PredictHand(_stateMachine.HoleHand, _stateMachine.CommunityCards, 100);
         var handRank = PlayerAIMoveDecision.SetHighestHandRank(predictedHand);
-        Debug.Log($"{_stateMachine.gameObject.name} HandRank:{handRank}");
 
         float futureHandWeight = PlayerAIMoveDecision.FutureHandRatio(_stateMachine.HoleHand, _stateMachine.CommunityCards, predictedHand, 100, _stateMachine.WeightSettings.TurnFutureHandWeight);
         float handRatio = PlayerAIMoveDecision.HoleHand(_stateMachine.HoleHand, _stateMachine.WeightSettings.TurnHandWeight, _stateMachine.gameObject.name);
@@ -22,8 +19,6 @@ public class PlayerAITurnState : State<PlayerAI, PlayerAIStateFactory>
 
         // Calculate weighted sum
         float weightSum = handRatio + fullHandRatio + potRatio + futureHandWeight;
-
-        Debug.Log($"{_stateMachine.gameObject.name} Flop HandRatio:{handRatio} FullHandRatio:{fullHandRatio} PotRatio:{potRatio} FutureHandRatio:{futureHandWeight} WholeWeight:{weightSum}");
 
         // Dynamically adjust thresholds based on weighted sum and game dynamics
         if (weightSum >= _stateMachine.WeightSettings.TurnRaiseThreshold)
@@ -52,7 +47,6 @@ public class PlayerAITurnState : State<PlayerAI, PlayerAIStateFactory>
 
     protected override void OnExit()
     {
-        Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI Turn Exit");
         _stateMachine.IsMyTurn = false;
     }
 
@@ -63,8 +57,6 @@ public class PlayerAITurnState : State<PlayerAI, PlayerAIStateFactory>
 
     private void Raise(float handStrength, float totalMoney, int currentBet, int highestBet)
     {
-        Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI Turn Raise");
-
         float raiseAmount = CalculateRaiseAmount(handStrength, totalMoney, currentBet, highestBet);
         _stateMachine.CurrentBet += (int)raiseAmount;
         _stateMachine.TotalMoney -= (int)raiseAmount;
@@ -78,12 +70,10 @@ public class PlayerAITurnState : State<PlayerAI, PlayerAIStateFactory>
 
         if (SharedData.HighestBet == _stateMachine.CurrentBet)
         {
-            Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI Turn Check");
             _stateMachine.SeatUI.ChangeInformationText("Check");
         }
         else
         {
-            Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI Turn Call");
             _stateMachine.SeatUI.ChangeInformationText("Call");
             callAmount = Mathf.Max(SharedData.HighestBet - _stateMachine.CurrentBet, 0);
         }
@@ -103,7 +93,6 @@ public class PlayerAITurnState : State<PlayerAI, PlayerAIStateFactory>
 
     private void Fold()
     {
-        Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI Turn Fold");
         _stateMachine.IsPlayerFolded = true;
         _stateMachine.SeatUI.ChangeInformationText("Fold");
         GameEvents.CallPlayerFold(_stateMachine.SeatId);

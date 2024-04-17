@@ -56,7 +56,7 @@ public class Card : MonoBehaviour
     }
 
     // Coroutine to hide the card with dissolve effect
-    public IEnumerator HideCard(float hideDuration, bool destroy)
+    public IEnumerator HideCard(float hideDuration)
     {
         float currentTime = 0f;
 
@@ -77,15 +77,6 @@ public class Card : MonoBehaviour
 
         // Ensure the card is fully hidden
         _newMaterial.SetFloat(_dissolveAmount, 1);
-
-        //// If destroy is true, destroy the card object
-        //if (destroy)
-        //    DestroyCard();
     }
 
-    // Method to destroy the card object
-    private void DestroyCard()
-    {
-        Destroy(gameObject, 1);
-    }
 }

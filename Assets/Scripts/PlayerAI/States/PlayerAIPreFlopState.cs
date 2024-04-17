@@ -9,12 +9,9 @@ public class PlayerAIPreFlopState : State<PlayerAI, PlayerAIStateFactory>
     // Method called when entering the pre-flop state
     protected override void OnEnter()
     {
-        Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI Pre-Flop Enter");
-
         // Predict hand and evaluate hand rank
         var predictedHand = PlayerAIMoveDecision.PredictHand(_stateMachine.HoleHand, _stateMachine.CommunityCards, 100);
         var handrank = PlayerAIMoveDecision.SetHighestHandRank(predictedHand);
-        Debug.Log($"{_stateMachine.gameObject.name}HandRank:{handrank}");
 
         // Calculate future hand weight, hand ratio, and pot ratio
         float futureHandWeight = PlayerAIMoveDecision.FutureHandRatio(_stateMachine.HoleHand, _stateMachine.CommunityCards, predictedHand, 100, _stateMachine.WeightSettings.PreFlopFutureHandWeight);
@@ -23,7 +20,6 @@ public class PlayerAIPreFlopState : State<PlayerAI, PlayerAIStateFactory>
 
         // Calculate weighted sum of factors
         float weightSum = handRatio + potRatio + futureHandWeight;
-        Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI Pre-Flop Weight Sum: {weightSum}");
 
         // Determine action based on weighted sum
         if (weightSum >= _stateMachine.WeightSettings.PreFlopRaiseThreshold)
@@ -45,7 +41,7 @@ public class PlayerAIPreFlopState : State<PlayerAI, PlayerAIStateFactory>
         CheckSwitchState();
     }
 
-    // Method called during state update (not used in this case)
+    // Method called during state update
     protected override void OnUpdate()
     {
     }
@@ -53,7 +49,6 @@ public class PlayerAIPreFlopState : State<PlayerAI, PlayerAIStateFactory>
     // Method called when exiting the pre-flop state
     protected override void OnExit()
     {
-        Debug.Log($"{_stateMachine.gameObject.name}-PLayerAI Pre-Flop Exit");
         _stateMachine.IsMyTurn = false;
     }
 
@@ -66,8 +61,6 @@ public class PlayerAIPreFlopState : State<PlayerAI, PlayerAIStateFactory>
     // Raise method for the pre-flop state
     private void Raise(float handStrength, float totalMoney, int currentBet, int highestBet)
     {
-        Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI Pre-Flop Raise");
-
         float raiseAmount = CalculateRaiseAmount(handStrength, totalMoney, currentBet, highestBet);
         _stateMachine.CurrentBet += (int)raiseAmount;
         _stateMachine.TotalMoney -= (int)raiseAmount;
@@ -82,12 +75,10 @@ public class PlayerAIPreFlopState : State<PlayerAI, PlayerAIStateFactory>
 
         if (SharedData.HighestBet == _stateMachine.CurrentBet)
         {
-            Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI Pre-Flop Check");
             _stateMachine.SeatUI.ChangeInformationText("Check");
         }
         else
         {
-            Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI Pre-Flop Call");
             _stateMachine.SeatUI.ChangeInformationText("Call");
             callAmount = Mathf.Max(SharedData.HighestBet - _stateMachine.CurrentBet, 0);
         }
@@ -108,7 +99,6 @@ public class PlayerAIPreFlopState : State<PlayerAI, PlayerAIStateFactory>
     // Fold method for the pre-flop state
     private void Fold()
     {
-        Debug.Log($"{_stateMachine.gameObject.name}-PlayerAI Pre-Flop Fold");
         _stateMachine.IsPlayerFolded = true;
         _stateMachine.SeatUI.ChangeInformationText("Fold");
         GameEvents.CallPlayerFold(_stateMachine.SeatId);

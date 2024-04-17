@@ -5,14 +5,10 @@ using static CardSettings;
 public class PlayerAI : MonoBehaviour, IControlStateMachine, IPlayer
 {
     // Lists to store player's hand, community cards, full hand, and deck
-    public List<Card> HoleHand;
-    public List<Card> CommunityCards;
-    public List<Card> FullHand;
-    public List<Card> Deck;
-
-    // Lists to store ranks and something (not specified in the provided code)
-    public List<HandRank> Ranks;
-    public List<float> Something;
+    [HideInInspector] public List<Card> HoleHand;
+    [HideInInspector] public List<Card> CommunityCards;
+    [HideInInspector] public List<Card> FullHand;
+    [HideInInspector] public List<Card> Deck;
 
     // References to UI elements
     public Seat Seat;
@@ -25,10 +21,13 @@ public class PlayerAI : MonoBehaviour, IControlStateMachine, IPlayer
     public HandRank FullHandRank;
     public int FullHandSumOfRanks;
     public int HandHighCardRank;
+
     public CurrentGameState CurrentGameState;
+
     public int CurrentBet;
     public int TotalMoney;
     public int SeatId;
+
     public bool IsSmallBlind;
     public bool IsBigBlind;
     public bool IsPlayerFolded;
@@ -116,6 +115,7 @@ public class PlayerAI : MonoBehaviour, IControlStateMachine, IPlayer
         if (TotalMoney <= 300)
         {
             TotalMoney = Random.Range(1000, 3000);
+            SeatUI.UpdateTotalMoneyText(TotalMoney);
         }
 
         // Reset all lists and variables
@@ -150,6 +150,7 @@ public class PlayerAI : MonoBehaviour, IControlStateMachine, IPlayer
             HoleHand.Add(card);
             FullHand.Add(card);
             card.transform.SetParent(Seat.CardPositions[_currentCardPosition], false);
+            card.transform.localPosition = Vector3.zero;
             _currentCardPosition++;
             StartCoroutine(card.DisplayCard(1f));
             EvaluateHand();

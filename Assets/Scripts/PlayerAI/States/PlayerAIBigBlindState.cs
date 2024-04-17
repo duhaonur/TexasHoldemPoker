@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class PlayerAIBigBlindState : State<PlayerAI, PlayerAIStateFactory>
 {
     public PlayerAIBigBlindState(PlayerAI stateMachineController, PlayerAIStateFactory stateFactory) : base(stateMachineController, stateFactory)
@@ -9,8 +7,6 @@ public class PlayerAIBigBlindState : State<PlayerAI, PlayerAIStateFactory>
     // Method called when entering the big blind state
     protected override void OnEnter()
     {
-        Debug.Log($"{_stateMachine.gameObject.name}-PLayerAI Big Blind Enter");
-
         // Set the bet amount to the minimum bet and deduct it from total money
         int betAmount = SharedData.MinimumBet;
         _stateMachine.CurrentBet += betAmount;
@@ -34,9 +30,7 @@ public class PlayerAIBigBlindState : State<PlayerAI, PlayerAIStateFactory>
     // Method called when exiting the big blind state
     protected override void OnExit()
     {
-        Debug.Log($"{_stateMachine.gameObject.name}-PLayerAI Big Blind Exit");
-
-        // Reset flags
+         // Reset flags
         _stateMachine.IsMyTurn = false;
         _stateMachine.IsBigBlind = false;
     }

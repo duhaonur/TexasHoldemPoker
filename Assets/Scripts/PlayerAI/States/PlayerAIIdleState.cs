@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class PlayerAIIdleState : State<PlayerAI, PlayerAIStateFactory>
 {
     public PlayerAIIdleState(PlayerAI stateMachineController, PlayerAIStateFactory stateFactory) : base(stateMachineController, stateFactory)
@@ -9,7 +7,6 @@ public class PlayerAIIdleState : State<PlayerAI, PlayerAIStateFactory>
     // Method called when entering the idle state
     protected override void OnEnter()
     {
-        Debug.Log($"{_stateMachine.gameObject.name}-PLayerAI Idle Enter");
     }
 
     // Method called during state update
@@ -21,7 +18,6 @@ public class PlayerAIIdleState : State<PlayerAI, PlayerAIStateFactory>
     // Method called when exiting the idle state
     protected override void OnExit()
     {
-        Debug.Log($"{_stateMachine.gameObject.name}-PLayerAI Idle Exit");
     }
 
     // Check if state should transition to another state based on game state and player's turn

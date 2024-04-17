@@ -11,8 +11,6 @@ public class DealerShowdownState : State<DealerAI, DealerStateFactory>
 
     protected override void OnEnter()
     {
-        Debug.Log("Dealer Showdown Enter");
-
         // Reset flags
         _stateMachine.GiveTurnToNextPlayer = false;
         _stateMachine.WaitForThePlayer = false;
@@ -49,7 +47,6 @@ public class DealerShowdownState : State<DealerAI, DealerStateFactory>
 
     protected override void OnExit()
     {
-        Debug.Log("Dealer Showdown Exit");
     }
 
     protected override void CheckSwitchState()
@@ -68,14 +65,12 @@ public class DealerShowdownState : State<DealerAI, DealerStateFactory>
 
         if (winners.Count > 1)
         {
-            Debug.Log("Pot Split");
 
             foreach (var winner in winners)
             {
                 double share = (double)winner.BetAmount / totalBetMadeByTheWinners;
                 int wonChips = (int)Math.Floor(share * SharedData.Pot);
 
-                Debug.Log($"Winner {winner.SeatId} WonChips {wonChips}");
 
                 GameEvents.CallWinner(winner.SeatId, wonChips);
                 GameEvents.CallDisplayWinnerText(winner.SeatId);

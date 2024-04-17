@@ -1,4 +1,3 @@
-using UnityEngine;
 public class DealerPreFlopState : State<DealerAI, DealerStateFactory>
 {
     public DealerPreFlopState(DealerAI stateMachineController, DealerStateFactory stateFactory) : base(stateMachineController, stateFactory)
@@ -7,7 +6,6 @@ public class DealerPreFlopState : State<DealerAI, DealerStateFactory>
 
     protected override void OnEnter()
     {
-        Debug.Log("Dealer Pre-Flop Enter");
         _stateMachine.GiveTurnToNextPlayer = false;
         _stateMachine.ReadyForNextStage = false;
 
@@ -35,7 +33,6 @@ public class DealerPreFlopState : State<DealerAI, DealerStateFactory>
 
     protected override void OnExit()
     {
-        Debug.Log("Dealer Pre-Flop Exit");
     }
 
     protected override void CheckSwitchState()

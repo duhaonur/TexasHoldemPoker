@@ -5,8 +5,10 @@ public class SeatUI : MonoBehaviour
 {
     // References to UI elements
     public Canvas Canvas;
+
     public RectTransform NameAndMoneyTextRect;
     public RectTransform BetTextRect;
+
     public TextMeshProUGUI NameText;
     public TextMeshProUGUI MoneyText;
     public TextMeshProUGUI BetText;

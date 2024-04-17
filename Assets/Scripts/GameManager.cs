@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     public List<Card> DeckPrefabs;
 
     // Private fields
-    [SerializeField] private List<Card> _deck;
+    private List<Card> _deck;
     private Dictionary<int, Seat> _players;
     private SeatController _seatController;
     private int _currentCommunityCard = 0;
@@ -58,7 +58,6 @@ public class GameManager : MonoBehaviour
         GameEvents.OnUpdatePotText += UpdatePotText;
         GameEvents.OnCommunityCard += DisplayCommunityCard;
         GameEvents.OnResetGame += GameReset;
-        GameEvents.OnGameIsReady += GameIsReady;
     }
 
     // OnDisable is called when the object becomes disabled or inactive
@@ -69,7 +68,6 @@ public class GameManager : MonoBehaviour
         GameEvents.OnUpdatePotText -= UpdatePotText;
         GameEvents.OnCommunityCard -= DisplayCommunityCard;
         GameEvents.OnResetGame -= GameReset;
-        GameEvents.OnGameIsReady -= GameIsReady;
     }
 
     // Method to reset the game state
@@ -78,7 +76,7 @@ public class GameManager : MonoBehaviour
         // Hide all cards in the deck
         foreach (var card in _deck)
         {
-            StartCoroutine(card.HideCard(0.5f, true));
+            StartCoroutine(card.HideCard(1f));
         }
 
         _currentCommunityCard = 0;
@@ -97,19 +95,15 @@ public class GameManager : MonoBehaviour
         UpdatePotText();
     }
 
-    // Placeholder method for when the game is ready to start
-    private void GameIsReady()
-    {
-        // Add any additional setup logic here
-    }
-
     // Method to display a community card
     private void DisplayCommunityCard(Card card)
     {
         // Set parent transform and position for the card
         card.transform.SetParent(CommunityCardSpawnPositions[_currentCommunityCard], false);
         card.transform.localRotation = Quaternion.Euler(-90, card.transform.rotation.y, card.transform.rotation.z);
-        card.transform.localScale = Vector3.one;
+        Vector3 newPos = card.transform.localPosition;
+        newPos.y = 0;
+        card.transform.localPosition = newPos;
 
         // Animate the card's appearance
         StartCoroutine(card.DisplayCard(1));
@@ -174,28 +168,6 @@ public class GameManager : MonoBehaviour
             _deck.Add(newCard);
         }
         return _deck;
-        //// Shuffle the deck
-        //System.Random rng = new System.Random();
-        //int n = _deck.Count;
-        //while (n > 1)
-        //{
-        //    n--;
-        //    int k = rng.Next(n + 1);
-        //    (_deck[n], _deck[k]) = (_deck[k], _deck[n]);
-        //}
-
-        //// Create a shuffled deck stack
-        //Stack<Card> shuffledDeck = new Stack<Card>();
-        //Vector3 newPos = Vector3.zero;
-        //newPos.y = SpaceBetweenCards * _deck.Count;
-        //foreach (Card card in _deck)
-        //{
-        //    card.gameObject.transform.localPosition = newPos;
-        //    shuffledDeck.Push(card);
-        //    newPos.y -= SpaceBetweenCards;
-        //}
-
-        //return shuffledDeck;
     }
     private Stack<Card> ShuffleDeck(List<Card> deck)
     {
@@ -215,7 +187,7 @@ public class GameManager : MonoBehaviour
         newPos.y = SpaceBetweenCards * deck.Count;
         foreach (Card card in deck)
         {
-            card.transform.SetParent(DeckSpawnPos);
+            card.transform.SetParent(DeckSpawnPos, false);
             card.gameObject.transform.localPosition = newPos;
             card.gameObject.transform.localRotation = Quaternion.Euler(90, 0, 0);
             shuffledDeck.Push(card);

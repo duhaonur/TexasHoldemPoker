@@ -9,7 +9,6 @@ public class DealerTurnState : State<DealerAI, DealerStateFactory>
     protected override void OnEnter()
     {
         // Initialize state variables
-        Debug.Log("Dealer Turn Enter");
         _stateMachine.GiveTurnToNextPlayer = false;
         _stateMachine.ReadyForNextStage = false;
         _stateMachine.GameState = CurrentGameState.Turn;
@@ -25,7 +24,6 @@ public class DealerTurnState : State<DealerAI, DealerStateFactory>
 
     protected override void OnExit()
     {
-        Debug.Log("Dealer Turn Exit");
     }
 
     protected override void CheckSwitchState()
