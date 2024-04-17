@@ -1,21 +1,28 @@
-using Cinemachine;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using static CardSettings;
+
 public class DealerShowdownState : State<DealerAI, DealerStateFactory>
 {
     public DealerShowdownState(DealerAI stateMachineController, DealerStateFactory stateFactory) : base(stateMachineController, stateFactory)
     {
     }
+
     protected override void OnEnter()
     {
-        Debug.Log("Deler Showdown Enter");
+        Debug.Log("Dealer Showdown Enter");
+
+        // Reset flags
         _stateMachine.GiveTurnToNextPlayer = false;
         _stateMachine.WaitForThePlayer = false;
+        _stateMachine.GameStarted = false;
 
+        // Create lists to store player hands and winners
         List<PlayerHand> playerHands = new List<PlayerHand>();
         List<PlayerHand> winners = new List<PlayerHand>();
 
+        // Get hands from players
         for (int i = 0; i < _stateMachine.Players.Count; i++)
         {
             var hand = _stateMachine.Players[i].seatedObj.GetComponent<IPlayer>().SendHand();
@@ -24,38 +31,66 @@ public class DealerShowdownState : State<DealerAI, DealerStateFactory>
             playerHand.FullHandSumOfRanks = hand.fullHandSumOfRanks;
             playerHand.HighCardRank = hand.highCardRank;
             playerHand.SeatId = hand.seatId;
+            playerHand.BetAmount = hand.betAmount;
             playerHands.Add(playerHand);
         }
+
+        // Determine winners
         winners = DetermineWinner(playerHands);
 
-        if(winners.Count > 1)
+        // Announce winners
+        AnnounceWinners(winners);
+    }
+
+    protected override void OnUpdate()
+    {
+        // No update logic needed for this state
+    }
+
+    protected override void OnExit()
+    {
+        Debug.Log("Dealer Showdown Exit");
+    }
+
+    protected override void CheckSwitchState()
+    {
+        
+    }
+
+    private void AnnounceWinners(List<PlayerHand> winners)
+    {
+        int totalBetMadeByTheWinners = 0;
+
+        foreach (var winner in winners)
+        {
+            totalBetMadeByTheWinners += winner.BetAmount;
+        }
+
+        if (winners.Count > 1)
         {
             Debug.Log("Pot Split");
-            for (int i = 0; i < winners.Count; i++)
+
+            foreach (var winner in winners)
             {
-                Debug.Log($"Winner:{winners[i].SeatId}");
+                double share = (double)winner.BetAmount / totalBetMadeByTheWinners;
+                int wonChips = (int)Math.Floor(share * SharedData.Pot);
+
+                Debug.Log($"Winner {winner.SeatId} WonChips {wonChips}");
+
+                GameEvents.CallWinner(winner.SeatId, wonChips);
+                GameEvents.CallDisplayWinnerText(winner.SeatId);
             }
         }
         else
         {
-            Debug.Log($"Winner:{winners[0].SeatId}");
+            GameEvents.CallWinner(winners[0].SeatId, SharedData.Pot);
+            GameEvents.CallDisplayWinnerText(winners[0].SeatId);
         }
+
+        // Reset the game state and check for state transition
+        _stateMachine.ResetGame();
     }
-    protected override void OnUpdate()
-    {
-        CheckSwitchState();
-    }
-    protected override void OnExit()
-    {
-        Debug.Log("Deler Showdown Exit");
-    }
-    protected override void CheckSwitchState()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            SwitchState(_stateFactory.ResetState);
-        }
-    }
+
     // Compare function to compare two PlayerHand objects
     public int ComparePlayerHands(PlayerHand hand1, PlayerHand hand2)
     {
@@ -74,6 +109,7 @@ public class DealerShowdownState : State<DealerAI, DealerStateFactory>
         // If the sum of ranks are the same, compare by high card rank
         return hand1.HighCardRank.CompareTo(hand2.HighCardRank);
     }
+
     // Main method to determine the winner and handle ties
     public List<PlayerHand> DetermineWinner(List<PlayerHand> playerHands)
     {
@@ -96,10 +132,12 @@ public class DealerShowdownState : State<DealerAI, DealerStateFactory>
         return winners;
     }
 }
+
 public class PlayerHand
 {
     public HandRank FullHandRank { get; set; }
     public int FullHandSumOfRanks { get; set; }
     public int HighCardRank { get; set; }
     public int SeatId { get; set; }
+    public int BetAmount { get; set; }
 }

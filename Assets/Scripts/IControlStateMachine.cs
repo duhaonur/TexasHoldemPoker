@@ -1,5 +1,3 @@
-using System.Collections;
-
 public interface IControlStateMachine
 {
     void SetNewState<T, U>(State<T, U> newState)

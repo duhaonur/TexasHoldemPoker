@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using static CardSettings;
 
+// Static class to evaluate hands
 public static class HandEvaluation
 {
-
+    // Method to evaluate the hand and determine its rank
     public static (HandRank handRank, int sumOfRanks) EvaluateHand(IEnumerable<Card> cards)
     {
+        // Check each possible hand rank in decreasing order of strength
         var royalFlushResult = IsRoyalFlush(cards);
         if (royalFlushResult.exists)
             return (HandRank.RoyalFlush, royalFlushResult.sumOfRanks);
@@ -47,7 +49,8 @@ public static class HandEvaluation
         var highCardResult = IsHighCard(cards);
         return (HandRank.HighCard, highCardResult.sumOfRanks);
     }
-    // Check if the hand is Royal Flush
+
+    // Method to check if the hand is Royal Flush
     public static (bool exists, int sumOfRanks) IsRoyalFlush(IEnumerable<Card> cards)
     {
         // Royal Flush: A, K, Q, J, 10 of the same suit
@@ -66,7 +69,7 @@ public static class HandEvaluation
         return (false, 0);
     }
 
-    // Check if the hand is Straight Flush
+    // Method to check if the hand is Straight Flush
     public static (bool exists, int sumOfRanks) IsStraightFlush(IEnumerable<Card> cards)
     {
         // Straight Flush: Five consecutive cards of the same suit
@@ -96,7 +99,7 @@ public static class HandEvaluation
         return (false, 0);
     }
 
-    // Check if the hand is Four of a Kind
+    // Method to check if the hand is Four of a Kind
     public static (bool exists, int sumOfRanks) IsFourOfAKind(IEnumerable<Card> cards)
     {
         // Four of a Kind: Four cards of the same rank
@@ -111,7 +114,7 @@ public static class HandEvaluation
         return (false, 0);
     }
 
-    // Check if the hand is Full House
+    // Method to check if the hand is Full House
     public static (bool exists, int sumOfRanks) IsFullHouse(IEnumerable<Card> cards)
     {
         var groupedCards = cards.GroupBy(c => c.CardRank);
@@ -127,7 +130,7 @@ public static class HandEvaluation
         return (false, 0);
     }
 
-    // Check if the hand is Flush
+    // Method to check if the hand is Flush
     public static (bool exists, int sumOfRanks) IsFlush(IEnumerable<Card> cards)
     {
         // Flush: All cards of the same suit
@@ -146,7 +149,7 @@ public static class HandEvaluation
         return (false, 0);
     }
 
-    // Check if the hand is Straight
+    // Method to check if the hand is Straight
     public static (bool exists, int sumOfRanks) IsStraight(IEnumerable<Card> cards)
     {
         // Straight: Five consecutive cards of any suit
@@ -173,7 +176,7 @@ public static class HandEvaluation
         return (false, 0);
     }
 
-    // Check if the hand is Three of a Kind
+    // Method to check if the hand is Three of a Kind
     public static (bool exists, int sumOfRanks) IsThreeOfAKind(IEnumerable<Card> cards)
     {
         // Three of a Kind: Three cards of the same rank
@@ -188,7 +191,7 @@ public static class HandEvaluation
         return (false, 0);
     }
 
-    // Check if the hand is Two Pair
+    // Method to check if the hand is Two Pair
     public static (bool exists, int sumOfRanks) IsTwoPair(IEnumerable<Card> cards)
     {
         // Two Pair: Two cards of one rank and two cards of another rank
@@ -216,7 +219,7 @@ public static class HandEvaluation
         return (false, 0);
     }
 
-    // Check if the hand is a Pair
+    // Method to check if the hand is a Pair
     public static (bool exists, int sumOfRanks) IsPair(IEnumerable<Card> cards)
     {
         // Pair: Two cards of the same rank
@@ -230,7 +233,8 @@ public static class HandEvaluation
         }
         return (false, 0);
     }
-    // Check if the hand is a High Card
+
+    // Method to check if the hand is a High Card
     public static (bool exists, int sumOfRanks) IsHighCard(IEnumerable<Card> cards)
     {
         // High Card: Highest card in the hand
