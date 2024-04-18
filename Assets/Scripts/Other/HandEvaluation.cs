@@ -75,20 +75,33 @@ public static class HandEvaluation
         // Straight Flush: Five consecutive cards of the same suit
         foreach (Suit suit in Enum.GetValues(typeof(Suit)))
         {
-            for (int i = 2; i <= (int)Rank.Ace - 3; i++)
+            for (int i = 1; i <= (int)Rank.King - 3; i++)
             {
                 bool straightFlushFound = true;
                 int sumOfRanks = 0;
+                bool aceAsOne = false; // Flag to indicate if Ace is being treated as 1
                 for (int j = i; j < i + 5; j++)
                 {
                     // Adjust the value of Ace when it's considered as the lowest card (A-2-3-4-5)
-                    Rank rankToCheck = (Rank)(j == (int)Rank.Ace ? 1 : j);
+                    Rank rankToCheck;
+                    int rankValue;
+                    if (j == 1 && !aceAsOne)
+                    {
+                        rankToCheck = Rank.Ace;
+                        rankValue = 1;
+                        aceAsOne = true; // Set the flag to indicate that Ace is being treated as 1
+                    }
+                    else
+                    {
+                        rankToCheck = (Rank)j;
+                        rankValue = j;
+                    }
                     if (!cards.Any(c => c.CardRank == rankToCheck && c.CardSuit == suit))
                     {
                         straightFlushFound = false;
                         break;
                     }
-                    sumOfRanks += (int)rankToCheck;
+                    sumOfRanks += rankValue;
                 }
                 if (straightFlushFound)
                 {
@@ -153,20 +166,33 @@ public static class HandEvaluation
     public static (bool exists, int sumOfRanks) IsStraight(IEnumerable<Card> cards)
     {
         // Straight: Five consecutive cards of any suit
-        for (int i = 2; i <= (int)Rank.Ace - 3; i++)
+        for (int i = 1; i <= (int)Rank.King - 3; i++)
         {
             bool straightFound = true;
             int sumOfRanks = 0;
+            bool aceAsOne = false; // Flag to indicate if Ace is being treated as 1
             for (int j = i; j < i + 5; j++)
             {
                 // Adjust the value of Ace when it's considered as the lowest card (A-2-3-4-5)
-                Rank rankToCheck = (Rank)(j == (int)Rank.Ace ? 1 : j);
+                Rank rankToCheck;
+                int rankValue;
+                if (j == 1 && !aceAsOne)
+                {
+                    rankToCheck = Rank.Ace;
+                    rankValue = 1;
+                    aceAsOne = true; // Set the flag to indicate that Ace is being treated as 1
+                }
+                else
+                {
+                    rankToCheck = (Rank)j;
+                    rankValue = j;
+                }
                 if (!cards.Any(c => c.CardRank == rankToCheck))
                 {
                     straightFound = false;
                     break;
                 }
-                sumOfRanks += (int)rankToCheck;
+                sumOfRanks += rankValue;
             }
             if (straightFound)
             {

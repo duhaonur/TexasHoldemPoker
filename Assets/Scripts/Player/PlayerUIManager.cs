@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static CardSettings;
 
@@ -89,17 +90,17 @@ public class PlayerUIManager : MonoBehaviour
     {
         // Set max value for the raise slider
         _raiseSlider.maxValue = PlayerData.TotalMoney;
+        _raiseSlider.minValue = SharedData.MinimumBet;
 
         // Check if the slider value is greater than 0
-        if (_raiseSlider.value > 0)
+        if (_raiseSlider.value > SharedData.MinimumBet)
         {
-            // Check if the raised amount is greater than or equal to the highest bet
             if (_raiseSlider.value >= SharedData.HighestBet)
             {
                 PlayerEvents.CallPlayerRaise((int)_raiseSlider.value);
-                HideUI();
+                HideUI();               
             }
-            _raiseSlider.value = 0;
+            _raiseSlider.value = SharedData.MinimumBet;
         }
 
         // Stop the fade coroutine if running
@@ -124,7 +125,7 @@ public class PlayerUIManager : MonoBehaviour
     // Method to update raise text based on slider value
     public void SliderChangeRaiseText()
     {
-        if (_raiseSlider.value == 0)
+        if (_raiseSlider.value == SharedData.MinimumBet)
         {
             _raiseText.text = "Close";
         }
@@ -142,8 +143,8 @@ public class PlayerUIManager : MonoBehaviour
 
     // Event handler to display total money
     private void DisplayTotalMoney(int totalMoney)
-    {
-        _totalMoneyText.text = $"${totalMoney}";
+    {        
+        _totalMoneyText.text = CurrencyFormatter.FormatCurrency(totalMoney);
     }
 
     // Event handler to display UI
@@ -217,6 +218,7 @@ public class PlayerUIManager : MonoBehaviour
                 _quickActionButtonOne.onClick.AddListener(TwoTimesOfTheHighestBet);
             }
         }
+    
     }
 
     // Method to handle quick action button two
@@ -250,6 +252,7 @@ public class PlayerUIManager : MonoBehaviour
                 _quickActionButtonTwo.onClick.AddListener(FourTimesOfTheHighestBet);
             }
         }
+     
     }
 
     // Method to set text for check/call button
@@ -284,24 +287,28 @@ public class PlayerUIManager : MonoBehaviour
     private void HalfOfThePot()
     {
         PlayerEvents.CallPlayerRaise(SharedData.Pot / 2);
+        HideUI();
     }
 
     // Method for betting one quarter of the pot
     private void OneQuarterOfThePot()
     {
         PlayerEvents.CallPlayerRaise(SharedData.Pot / 4);
+        HideUI();
     }
 
     // Method for betting two times the highest bet
     private void TwoTimesOfTheHighestBet()
     {
         PlayerEvents.CallPlayerRaise(SharedData.HighestBet * 2);
+        HideUI();
     }
 
     // Method for betting four times the highest bet
     private void FourTimesOfTheHighestBet()
     {
         PlayerEvents.CallPlayerRaise(SharedData.HighestBet * 4);
+        HideUI();
     }
 
     // Coroutine to fade canvas group alpha
@@ -329,5 +336,14 @@ public class PlayerUIManager : MonoBehaviour
         }
 
         canvasGroup.alpha = targetAlpha;
+    }
+
+    public void BackToMenu()
+    {
+        FirebaseManager.Instance.SetPlayerData("point", PlayerData.TotalMoney);
+        SceneManager.LoadScene("Menu");
+        SharedData.HighestBet = 0;
+        SharedData.Pot = 0;
+        PlayerData.CurrentBet = 0;
     }
 }

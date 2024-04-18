@@ -42,10 +42,19 @@ public class PlayerController : MonoBehaviour, IPlayer
 
         _inputController = CheckNull(_inputController);
 
-        PlayerData.TotalMoney = 1000;
-        PlayerEvents.CallDisplayTotalMoney(PlayerData.TotalMoney);
+        FirebaseManager.Instance.PlayerData(GetMoney);
+
     }
 
+    private void GetMoney(string name, int money)
+    {
+        if (money < 300)
+        {
+            money = 1000;
+        }
+        PlayerData.TotalMoney = money;
+        PlayerEvents.CallDisplayTotalMoney(PlayerData.TotalMoney);
+    }
     private void OnEnable()
     {
         // Subscribe to events
@@ -84,6 +93,11 @@ public class PlayerController : MonoBehaviour, IPlayer
         PlayerEvents.OnPlayerFold -= PlayerFold;
     }
 
+    private void OnApplicationQuit()
+    {
+        FirebaseManager.Instance.SetPlayerData("point", PlayerData.TotalMoney);
+    }
+
     // Interface method to send hand information
     public (HandRank, int, int, int, int) SendHand()
     {
@@ -93,10 +107,11 @@ public class PlayerController : MonoBehaviour, IPlayer
     private void GameReset()
     {
         // Reset player data
-        if (PlayerData.TotalMoney <= 200)
+        if (PlayerData.TotalMoney <= 300)
         {
-            PlayerData.TotalMoney = 1000;
+            PlayerData.TotalMoney = 1500;
         }
+        FirebaseManager.Instance.SetPlayerData("point", PlayerData.TotalMoney);
         HoleHand = new List<Card>();
         FullHand = new List<Card>();
         PlayerData.CurrentBet = 0;
@@ -110,12 +125,18 @@ public class PlayerController : MonoBehaviour, IPlayer
 
     private void PlayerFold()
     {
+        if (!IsMyTurn)
+            return;
+        IsMyTurn = false;
         // Call fold event
         GameEvents.CallPlayerFold(SeatId);
     }
 
     private void PlayerCheck()
     {
+        if (!IsMyTurn)
+            return;
+        IsMyTurn = false;
         // Call check event
         GameEvents.CallPlayerFinishedTurn(0, PlayerData.CurrentBet, SeatId);
     }
@@ -132,6 +153,9 @@ public class PlayerController : MonoBehaviour, IPlayer
 
     private void PlayerCall(int callAmount)
     {
+        if (!IsMyTurn)
+            return;
+        IsMyTurn = false;
         // Process player call
         callAmount = Mathf.Min(callAmount, PlayerData.TotalMoney);
         IsAllIn = callAmount >= PlayerData.TotalMoney;
@@ -145,6 +169,9 @@ public class PlayerController : MonoBehaviour, IPlayer
 
     private void PlayerRaise(int raiseAmount)
     {
+        if (!IsMyTurn)
+            return;
+        IsMyTurn = false;
         // Process player raise
         raiseAmount = Mathf.Min(raiseAmount, PlayerData.TotalMoney);
         IsAllIn = raiseAmount >= PlayerData.TotalMoney;
@@ -181,7 +208,7 @@ public class PlayerController : MonoBehaviour, IPlayer
                 IsBigBlind = false;
                 return;
             }
-            IsMyTurn = true;
+          IsMyTurn = true;
             PlayerEvents.CallDisplayUI();
         }
     }
@@ -260,4 +287,6 @@ public class PlayerController : MonoBehaviour, IPlayer
             return component;
         }
     }
+
+
 }

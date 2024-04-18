@@ -159,8 +159,8 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2503683672892694407}
-  m_LocalRotation: {x: 0.50000006, y: 0.5, z: -0.5, w: 0.50000006}
-  m_LocalPosition: {x: 0, y: 0, z: 0.00000047683716}
+  m_LocalRotation: {x: 0.49999982, y: 0.50000024, z: -0.5000002, w: 0.4999998}
+  m_LocalPosition: {x: 0, y: 0, z: 0.00000044703484}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -858,7 +858,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: c4d9405c9f1a4a34ebe5f4a4aa20f870, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -921,7 +921,8 @@ MonoBehaviour:
   CardPositions:
   - {fileID: 4671745283399774258}
   - {fileID: 5867598354970294370}
-  SeatId: 0
+  SeatId: 1
+  isAllIn: 0
 --- !u!1 &8774447732362198154
 GameObject:
   m_ObjectHideFlags: 0

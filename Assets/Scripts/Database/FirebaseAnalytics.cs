@@ -10,6 +10,7 @@ public class FirebaseAnalytics : MonoBehaviour
 
     void Start()
     {
+        DontDestroyOnLoad(gameObject);
         // Oyuna giriş zamanını kaydet
         _startTime = Time.time;
 

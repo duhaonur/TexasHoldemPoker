@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "669455857531-0tve2qiinbaa0rfgn7kpdospju3eimaf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.PixiCorp.TexasHoldemPoker",
+            "certificate_hash": "ef2e8a42872ff27d3c03757fd3c6d2872aa9223a"
+          }
+        },
+        {
           "client_id": "669455857531-5t558dav6r4832h90tvakuq2cerme4gv.apps.googleusercontent.com",
           "client_type": 3
         }
